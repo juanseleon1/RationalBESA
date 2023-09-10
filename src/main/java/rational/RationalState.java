@@ -184,13 +184,13 @@ public class RationalState extends StateBESA {
 
     public void recordBeliefsHistory() {
         if (this.historyCollector != null) {
-            this.historyCollector.collectHistoryFromBeliefs();
+            this.historyCollector.collectHistoryFromBeliefs(this.believes);
         }
     }
 
     public void recordReasoningHistory() {
         if (this.historyCollector != null) {
-            this.historyCollector.collectHistoryFromReasoning();
+            this.historyCollector.collectHistoryFromReasoning(this);
         }
     }
 
