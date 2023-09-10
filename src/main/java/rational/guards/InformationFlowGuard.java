@@ -1,6 +1,6 @@
 package rational.guards;
 
-import BESA.ExceptionBESA;
+import BESA.Exception.ExceptionBESA;
 import BESA.Kernel.Agent.Event.EventBESA;
 import BESA.Kernel.Agent.GuardBESA;
 import BESA.Kernel.System.AdmBESA;
@@ -27,6 +27,7 @@ public class InformationFlowGuard extends GuardBESA {
         RationalState state = (RationalState) this.getAgent().getState();
         InfoData info = (InfoData) ebesa.getData();
         state.getBelieves().update(info);
+        state.recordBeliefsHistory();
         try {
             for (String subscriptionsToUpdate : state.getSubscriptionsToUpdate()) {
                 AgHandlerBESA handler = AdmBESA.getInstance().getHandlerByAid(this.getAgent().getAid());

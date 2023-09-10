@@ -2,7 +2,6 @@ package rational.guards;
 
 import BESA.Kernel.Agent.Event.EventBESA;
 import BESA.Kernel.Agent.GuardBESA;
-import BESA.Log.ReportBESA;
 import java.util.Iterator;
 import rational.RationalState;
 import rational.mapping.Plan;

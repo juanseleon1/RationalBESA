@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import rational.explainability.HistoryCollector;
 import rational.mapping.Believes;
 
 /**
@@ -39,6 +41,9 @@ public class RationalState extends StateBESA {
 
     // List of subscriptions that need to be updated.
     List<String> subscriptionsToUpdate;
+    
+    //History Collector to support explainability
+    HistoryCollector historyCollector;
 
     /**
      * Default constructor for RationalState.
@@ -62,7 +67,15 @@ public class RationalState extends StateBESA {
         this.asyncronicServices = new HashMap<>();
         this.subscriptionsToUpdate = new ArrayList<>();
     }
-
+    /**
+     * Constructor for RationalState with an initial set of believes.
+     *
+     * @param believes Initial set of believes for the agent.
+     */
+    public RationalState(Believes believes, HistoryCollector historyCollector) {
+        this(believes);
+        this.historyCollector = historyCollector;
+    }
     /**
      * Constructor for RationalState with an initial set of believes and a main
      * role.
@@ -168,4 +181,26 @@ public class RationalState extends StateBESA {
             }
         }
     }
+
+    public void recordBeliefsHistory() {
+        if (this.historyCollector != null) {
+            this.historyCollector.collectHistoryFromBeliefs();
+        }
+    }
+
+    public void recordReasoningHistory() {
+        if (this.historyCollector != null) {
+            this.historyCollector.collectHistoryFromReasoning();
+        }
+    }
+
+    public HistoryCollector getHistoryCollector() {
+        return historyCollector;
+    }
+
+    public void setHistoryCollector(HistoryCollector historyCollector) {
+        this.historyCollector = historyCollector;
+    }
+
+    
 }

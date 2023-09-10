@@ -1,6 +1,6 @@
 package rational;
 
-import BESA.ExceptionBESA;
+import BESA.Exception.ExceptionBESA;
 import BESA.Kernel.Agent.AgentBESA;
 import BESA.Kernel.Agent.Event.EventBESA;
 import BESA.Kernel.Agent.KernelAgentExceptionBESA;
