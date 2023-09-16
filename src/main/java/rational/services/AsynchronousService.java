@@ -41,15 +41,4 @@ public abstract class AsynchronousService extends SPService {
      */
     public abstract void executeAsyncService(SPServiceDataRequest data, StateServiceProvider ssp);
 
-
-        /**
-     * Executes the asynchronous service with the given data and adapter.
-     *
-     * @param data The service data request.
-     * @param adapter The BESA adapter.
-     * @param subscribeAgents A map of subscribed agents and their corresponding
-     * SPInfoGuard instances.
-     */
-    public abstract void replyToAsyncService(DataBESA data, StateServiceProvider ssp);
-
 }
