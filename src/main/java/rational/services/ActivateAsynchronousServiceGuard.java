@@ -24,8 +24,7 @@ public class ActivateAsynchronousServiceGuard extends GuardBESA {
         );
         servicio.executeAsyncService(
                 data,
-                state.getAdapter(),
-                state.getAgentsGuardsTableAsync()
+                state
         );
     }
 }
