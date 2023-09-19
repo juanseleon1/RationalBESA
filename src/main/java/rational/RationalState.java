@@ -34,10 +34,10 @@ public class RationalState extends StateBESA {
     Map<String, String> SPservices;
 
     // Map of the agent's synchronous services.
-    Map<String, List<Class>> syncronicServices;
+    Map<String, List<Class<?>>> syncronicServices;
 
     // Map of the agent's asynchronous services.
-    Map<String, List<Class>> asyncronicServices;
+    Map<String, List<Class<?>>> asyncronicServices;
 
     // List of subscriptions that need to be updated.
     List<String> subscriptionsToUpdate;
@@ -119,19 +119,19 @@ public class RationalState extends StateBESA {
         this.mainRole = mainRole;
     }
 
-    public Map<String, List<Class>> getAsyncronicServices() {
+    public Map<String, List<Class<?>>> getAsyncronicServices() {
         return asyncronicServices;
     }
 
-    public void setAsyncronicServices(Map<String, List<Class>> asyncronicServices) {
+    public void setAsyncronicServices(Map<String, List<Class<?>>> asyncronicServices) {
         this.asyncronicServices = asyncronicServices;
     }
 
-    public Map<String, List<Class>> getSyncronicServices() {
+    public Map<String, List<Class<?>>> getSyncronicServices() {
         return syncronicServices;
     }
 
-    public void setSyncronicServices(Map<String, List<Class>> syncronicServices) {
+    public void setSyncronicServices(Map<String, List<Class<?>>> syncronicServices) {
         this.syncronicServices = syncronicServices;
     }
 
@@ -161,13 +161,13 @@ public class RationalState extends StateBESA {
      * @param type The type of the service (synchronous or asynchronous).
      * @param guard The guard associated with the service.
      */
-    public void addService(String service, String sp, TYPE type, Class guard) {
+    public void addService(String service, String sp, TYPE type, Class<?> guard) {
         this.SPservices.put(service, sp);
         if (type == TYPE.SYNCHRONIC) {
             if (this.syncronicServices.containsKey(sp)) {
                 this.syncronicServices.get(sp).add(guard);
             } else {
-                List<Class> guards = new ArrayList<>();
+                List<Class<?>> guards = new ArrayList<>();
                 guards.add(guard);
                 this.syncronicServices.put(sp, guards);
             }
@@ -175,7 +175,7 @@ public class RationalState extends StateBESA {
             if (this.asyncronicServices.containsKey(sp)) {
                 this.asyncronicServices.get(sp).add(guard);
             } else {
-                List<Class> guards = new ArrayList<>();
+                List<Class<?>> guards = new ArrayList<>();
                 guards.add(guard);
                 this.asyncronicServices.put(sp, guards);
             }

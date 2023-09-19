@@ -1,6 +1,5 @@
 package rational.mapping;
 
-import BESA.Log.ReportBESA;
 
 /**
  * Abstract Task class representing a task within a BDI rational agent.

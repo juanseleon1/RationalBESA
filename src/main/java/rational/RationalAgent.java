@@ -135,7 +135,7 @@ public abstract class RationalAgent extends AgentBESA {
     final public void setupAgent() {
         RationalState rationalState = (RationalState) getState();
         for (String serviceName : rationalState.getAsyncronicServices().keySet()) {
-            for (Class guard : rationalState.getAsyncronicServices().get(serviceName)) {
+            for (Class<?> guard : rationalState.getAsyncronicServices().get(serviceName)) {
                 try {
                     String agId = getAdmLocal().lookupSPServiceInDirectory(rationalState.getSPservices().get(serviceName));
                     AgHandlerBESA agh = getAdmLocal().getHandlerByAid(agId);
@@ -149,7 +149,7 @@ public abstract class RationalAgent extends AgentBESA {
             }
         }
         for (String serviceName : rationalState.getSyncronicServices().keySet()) {
-            for (Class guard : rationalState.getSyncronicServices().get(serviceName)) {
+            for (Class<?> guard : rationalState.getSyncronicServices().get(serviceName)) {
                 try {
                     String agId = getAdmLocal().lookupSPServiceInDirectory(serviceName);
                     AgHandlerBESA agh = getAdmLocal().getHandlerByAid(agId);

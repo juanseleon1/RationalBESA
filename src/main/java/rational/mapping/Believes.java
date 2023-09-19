@@ -27,5 +27,5 @@ public interface Believes {
      * @return A cloned instance of the belief system.
      * @throws Exception if an error occurs during the cloning process.
      */
-    public Believes clone() throws Exception;
+    public Believes clone() throws CloneNotSupportedException;
 }
