@@ -53,4 +53,8 @@ public class VoidTask extends Task {
         return true;
     }
 
+    @Override
+    public synchronized boolean isFinalized() {
+        return true;
+    }
 }

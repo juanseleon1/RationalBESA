@@ -1,6 +1,9 @@
 package rational.guards;
 
 import BESA.Kernel.Agent.Event.EventBESA;
+import BESA.Kernel.System.AdmBESA;
+import BESA.Kernel.System.Directory.AgHandlerBESA;
+import BESA.Exception.ExceptionBESA;
 import BESA.Kernel.Agent.GuardBESA;
 import BESA.Log.ReportBESA;
 import java.util.Iterator;
@@ -19,7 +22,7 @@ public class ChangeRationalRoleGuard extends GuardBESA {
     public void funcExecGuard(EventBESA ebesa) {
         RationalState state = (RationalState) this.getAgent().getState();
         RationalRole newrole = (RationalRole) ebesa.getData();
-
+        boolean sendUpdate = false;
         if (state.getMainRole() != null) {
             ReportBESA.debug("🟢 MainRole " + state.getMainRole().getRoleName() + " 🟢 Trying to change to rol 🟩 "
                     + newrole.getRoleName());
@@ -29,47 +32,53 @@ public class ChangeRationalRoleGuard extends GuardBESA {
 
         if (state.getMainRole() != null
                 && !state.getMainRole().getRoleName().equals(((RationalRole) ebesa.getData()).getRoleName())) {
+            sendUpdate = true;
+            ReportBESA.debug("History Recording Start");
             state.recordReasoningHistory();
+            ReportBESA.debug("History Recording end");
             Plan plan = state.getMainRole().getRolePlan();
             if (plan != null) {
                 Iterator<Task> it = plan.getTasksInExecution().iterator();
-                ReportBESA.warn("🔸 " + plan.getTasks().size() + " plans " + plan.getTasks());
+                ReportBESA.debug("🔸 " + plan.getTasks().size() + " plans " + plan.getTasks());
                 while (it.hasNext()) {
                     Task task = it.next();
-                    ReportBESA.warn("Revisando si la tarea está en ejecución: " + task.toString());
+                    ReportBESA.debug("Revisando si la tarea está en ejecución: " + task.toString());
                     if (task.isInExecution()) {
-                        ReportBESA.warn("Tarea en ejecución: " + task.getClass().getSimpleName().toString());
+                        ReportBESA.debug("Tarea en ejecución: " + task.getClass().getSimpleName().toString());
                         task.cancelTask(state.getBelieves());
-                        // while (task.isInExecution()) {
-                        try {
-                            ReportBESA.warn("En espera " + task.toString());
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        // }
-                        ReportBESA.warn("Terminó la tarea");
                         it.remove();
                     } else if (task.isFinalized()) {
-                        ReportBESA.warn("isFinalized tarea");
                         it.remove();
                     }
-                    ReportBESA.warn("setTaskFinalized tarea");
                     task.setTaskFinalized();
                 }
             }
             newrole.resetPlan();
             state.setMainRole(newrole);
         } else if (state.getMainRole() == null) {
-            ReportBESA.warn("NUEVO ROL ASIGNADO");
+            sendUpdate = true;
+            ReportBESA.debug("NUEVO ROL ASIGNADO");
+            ReportBESA.debug("History Recording Start");
+            state.recordReasoningHistory();
+            ReportBESA.debug("History Recording end");
             newrole.resetPlan();
             state.setMainRole(newrole);
         } else if (!state.getMainRole().getRolePlan().inExecution()) {
-            ReportBESA.warn("NO HAY NADA EJECUTANDOSE");
-            ReportBESA.warn(
+            ReportBESA.debug("NO HAY NADA EJECUTANDOSE");
+            ReportBESA.debug(
                     "getTasksWaitingForExecution " + state.getMainRole().getRolePlan().getTasksWaitingForExecution());
-            ReportBESA.warn("getTasks " + state.getMainRole().getRolePlan().getTasks());
+            ReportBESA.debug("getTasks " + state.getMainRole().getRolePlan().getTasks());
             state.getMainRole().getRolePlan().reset();
+        }
+        if (sendUpdate) {
+            AgHandlerBESA handler;
+            try {
+                ReportBESA.debug("Sending update.");
+                handler = AdmBESA.getInstance().getHandlerByAid(this.getAgent().getAid());
+                handler.sendEvent(new EventBESA(PlanExecutionGuard.class.getName()));
+            } catch (ExceptionBESA e) {
+                e.printStackTrace();
+            }
         }
     }
 
