@@ -27,15 +27,12 @@ public class InformationFlowGuard extends GuardBESA {
     public void funcExecGuard(EventBESA ebesa) {
         RationalState state = (RationalState) this.getAgent().getState();
         InfoData info = (InfoData) ebesa.getData();
-        boolean isUpdated = state.getBelieves().update(info);
-        ReportBESA.debug("isUpdated " + isUpdated);
+        state.getBelieves().update(info);
+        state.recordBeliefsHistory();
 
-        if (isUpdated) {
-            state.recordBeliefsHistory();
-        }
         try {
             for (String subscriptionsToUpdate : state.getSubscriptionsToUpdate()) {
-                ReportBESA.debug("UPDATING SUBS " + subscriptionsToUpdate);
+                //ReportBESA.debug("UPDATING SUBS " + subscriptionsToUpdate);
                 AgHandlerBESA handler = AdmBESA.getInstance().getHandlerByAid(this.getAgent().getAid());
                 handler.sendEvent(new EventBESA(subscriptionsToUpdate));
             }
